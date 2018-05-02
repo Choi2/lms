@@ -14,11 +14,9 @@ import org.springframework.stereotype.Service;
 import com.cafe24.lms.domain.Item;
 import com.cafe24.lms.domain.Pager;
 import com.cafe24.lms.domain.Rent;
-import com.cafe24.lms.domain.Reverse;
 import com.cafe24.lms.domain.User;
 import com.cafe24.lms.repository.ItemRepository;
 import com.cafe24.lms.repository.RentRepository;
-import com.cafe24.lms.repository.ReverseRepository;
 
 @Service
 @Transactional
@@ -30,8 +28,6 @@ public class RentService {
 	@Autowired
 	private ItemRepository itemRepository;
 	
-	@Autowired
-	private ReverseRepository reverseRepository;
 	
 	private Pager pager;
 
@@ -40,12 +36,17 @@ public class RentService {
 	}
 	
 	public Page<Rent> getAllRent(Long page) {
-		PageRequest pageRequest = new PageRequest(0, 5, new Sort(Direction.DESC, "no"));
-		Page<Rent> list = rentRepository.findAllByStartNo(page, pageRequest);
+		
 		pager = new Pager();
 		pager.setPage(page);
-		pager.setTotalCount(list.getTotalPages());
+		pager.setTotalCount(rentRepository.count());
 		pager.calculate(pager.getPage());
+		
+		if(page == 0) {page = 1L;}
+		
+		PageRequest pageRequest = new PageRequest(0, 5, new Sort(Direction.DESC, "no"));
+		Page<Rent> list = rentRepository.findAll(pageRequest);
+	
 		return list;
 	}
 

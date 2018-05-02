@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.cafe24.lms.domain.Rent;
-import com.cafe24.lms.domain.Reverse;
+import com.cafe24.lms.domain.Reserve;
 import com.cafe24.lms.service.RentService;
-import com.cafe24.lms.service.ReverseService;
+import com.cafe24.lms.service.ReserveService;
 
 // @Auth(value=Auth.Role.ADMIN)
 @Controller
@@ -21,7 +21,7 @@ public class AdminController {
 	private RentService rentService;
 	
 	@Autowired
-	private ReverseService reverseService;
+	private ReserveService reverseService;
 	
 	@RequestMapping( { "", "/rent", "/main" } )
 	public String main( 
@@ -34,10 +34,10 @@ public class AdminController {
 	}
 	
 	@RequestMapping( "/reserve" )
-	public String board(
+	public String reserve(
 			Model model,
 			@RequestParam(required=false, defaultValue="0") Long page) {
-		Page<Reverse> list = reverseService.getAllRent(page);
+		Page<Reserve> list = reverseService.getAllReserve(page);
 		model.addAttribute("list", list);
 		model.addAttribute("pager", rentService.getPager());
 		return "admin/reserve";

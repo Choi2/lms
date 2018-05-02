@@ -32,12 +32,23 @@
 						<td>${vo.title}</td>
 						<td>${vo.type} (${vo.category.name})</td>
 						<td style="text-align:center;">
-							<c:if test="${vo.isRent eq false}">
-							<a href="${pageContext.servletContext.contextPath}/rent?itemNo=${vo.no}" class="btn">대여</a>
-							</c:if>
-							<c:if test="${vo.isRent eq true}">
-							<a href="${pageContext.servletContext.contextPath}/reverse?itemNo=${vo.no}" class="btn">예약</a>
-							</c:if>
+							<c:choose>
+							<c:when test="${(usedRentNoList ne null) and usedRentNoList.contains(vo.no) eq true}">
+								<p> 이미 대여가 되어 있는 도서입니다. </p>
+							</c:when>
+							
+							<c:when test="${(usedReserveNoList ne null) and usedReserveNoList.contains(vo.no) eq true}">
+								<p> 이미 예약이 되어 있는 도서입니다. </p>
+							</c:when>
+							<c:otherwise>
+								<c:if test="${vo.isRent eq false}">
+								<a href="${pageContext.servletContext.contextPath}/rent?itemNo=${vo.no}" class="btn">대여</a>
+								</c:if>
+								<c:if test="${vo.isRent eq true}">
+								<a href="${pageContext.servletContext.contextPath}/reserve?itemNo=${vo.no}" class="btn">예약</a>
+								</c:if>
+							</c:otherwise>
+							</c:choose>
 						</td>
 					</tr>
 					</c:forEach>
@@ -46,17 +57,17 @@
 				<div class="pager">
 					<ul>
 						<c:if test="${pager.leftArrow eq true}">
-							<li><a href="${pageContext.servletContext.contextPath}/board?page=${pager.startPage - 1}&word=${pager.word}">◀</a></li>
+							<li><a href="${pageContext.servletContext.contextPath}?page=${pager.startPage - 1}">◀</a></li>
 						</c:if>
 						
 						<c:forEach begin="${pager.startPage}" end="${pager.endPage}" varStatus="status">
 							<li>
 								<c:if test="${param.page == status.index}">	
-									<a style="color:red;" href="${pageContext.servletContext.contextPath}/board?page=${status.index}&word=${word}">${status.index}</a>
+									<a style="color:red;" href="${pageContext.servletContext.contextPath}?page=${status.index}">${status.index}</a>
 								</c:if>
 									
 								<c:if test="${param.page != status.index}">
-									<a href="${pageContext.servletContext.contextPath}/board?page=${status.index}&word=${word}">${status.index}</a>
+									<a href="${pageContext.servletContext.contextPath}?page=${status.index}">${status.index}</a>
 								</c:if>
 							</li>
 						</c:forEach>
@@ -66,7 +77,7 @@
 						</c:forEach>
 						
 						<c:if test="${pager.rightArrow eq true}">
-							<li><a href="${pageContext.servletContext.contextPath}/board?page=${pager.endPage + 1}&word=${pager.word}">▶</a></li>
+							<li><a href="${pageContext.servletContext.contextPath}?page=${pager.endPage + 1}">▶</a></li>
 						</c:if>
 					</ul>
 				</div>				

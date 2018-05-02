@@ -14,8 +14,8 @@ import javax.persistence.Table;
 import org.hibernate.annotations.ColumnDefault;
 
 @Entity
-@Table(name="reverse")
-public class Reverse {
+@Table(name="reserve")
+public class Reserve {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long no;

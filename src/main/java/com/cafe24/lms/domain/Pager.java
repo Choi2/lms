@@ -15,7 +15,7 @@ public class Pager {
 	private boolean leftArrow;
 	private boolean rightArrow;
 	
-	private int totalCount; //총 게시물 수
+	private Long totalCount; //총 게시물 수
 	
 	private String word;
 	
@@ -47,11 +47,11 @@ public class Pager {
 		}
 	}
 	
-	public int getTotalCount() {
+	public Long getTotalCount() {
 		return totalCount;
 	}
 
-	public void setTotalCount(int totalCount) {
+	public void setTotalCount(Long totalCount) {
 		this.totalCount = totalCount;
 	}
 

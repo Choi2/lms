@@ -13,17 +13,17 @@ import org.springframework.stereotype.Service;
 
 import com.cafe24.lms.domain.Item;
 import com.cafe24.lms.domain.Pager;
-import com.cafe24.lms.domain.Reverse;
+import com.cafe24.lms.domain.Reserve;
 import com.cafe24.lms.domain.User;
 import com.cafe24.lms.repository.ItemRepository;
-import com.cafe24.lms.repository.ReverseRepository;
+import com.cafe24.lms.repository.ReserveRepository;
 
 @Service
 @Transactional
-public class ReverseService {
+public class ReserveService {
 
 	@Autowired
-	private ReverseRepository reverseRepository;
+	private ReserveRepository reserveRepository;
 	
 	@Autowired
 	private ItemRepository itemRepository;
@@ -35,37 +35,43 @@ public class ReverseService {
 		return pager;
 	}
 	
-	public Page<Reverse> getAllRent(Long page) {
-		PageRequest pageRequest = new PageRequest(0, 5, new Sort(Direction.DESC, "no"));
-		Page<Reverse> list = reverseRepository.findAllByStartNo(page, pageRequest);
+	public Page<Reserve> getAllReserve(Long page) {
+		
 		pager = new Pager();
 		pager.setPage(page);
-		pager.setTotalCount(list.getTotalPages());
+		pager.setTotalCount(reserveRepository.count());
 		pager.calculate(pager.getPage());
+		
+		if(page == 0) {page = 1L;}
+		
+		PageRequest pageRequest = new PageRequest((int) (page - 1), 5, new Sort(Direction.DESC, "no"));
+		Page<Reserve> list = reserveRepository.findAll(pageRequest);
+		
 		return list;
 	}
 
 	public void addReverse(Long itemNo, User user) {
 		
-		Reverse reverse = reverseRepository.findByItemNoWithMaxReturndate(itemNo);
+		Reserve reserve = reserveRepository.findByItemNoWithMaxReturndate(itemNo);
+		Calendar cal = Calendar.getInstance();
 		
-		System.out.println(reverse);
-		
-		if(reverse == null) {
-			reverse = new Reverse();
+		if(reserve == null) {
+			reserve = new Reserve();
 			Item item = itemRepository.findOne(itemNo);
-			reverse.setItem(item);			
+			reserve.setItem(item);		
+		} else {
+			reserve.setNo(reserve.getNo() + 1);
+			cal.setTime(reserve.getReturnDate());
 		}
 		
-		reverse.setUser(user);
-		reverse.setReverseRank(reverse.getReverseRank() + 1);
+		reserve.setUser(user);
+		reserve.setReverseRank(reserve.getReverseRank() + 1);
 		
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(reverse.getReturnDate());
-		reverse.setBorrowDate(cal.getTime());	
+	
+		reserve.setBorrowDate(cal.getTime());	
 		cal.add(Calendar.DAY_OF_MONTH, 7);
-		reverse.setReturnDate(cal.getTime());
+		reserve.setReturnDate(cal.getTime());
 		
-		reverseRepository.save(reverse);
+		reserveRepository.save(reserve);
 	} //사용자 예약
 }

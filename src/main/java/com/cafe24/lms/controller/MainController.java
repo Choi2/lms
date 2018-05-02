@@ -1,5 +1,9 @@
 package com.cafe24.lms.controller;
 
+import java.util.List;
+
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -13,7 +17,8 @@ import com.cafe24.lms.domain.Item;
 import com.cafe24.lms.domain.User;
 import com.cafe24.lms.service.ItemService;
 import com.cafe24.lms.service.RentService;
-import com.cafe24.lms.service.ReverseService;
+import com.cafe24.lms.service.ReserveService;
+import com.cafe24.lms.service.UserService;
 
 @Controller
 @SessionAttributes("authUser")
@@ -26,13 +31,25 @@ public class MainController {
 	private RentService rentService;
 	
 	@Autowired
-	private ReverseService reverseService;
+	private ReserveService reverseService;
 	
+	@Autowired
+	private UserService userSerivce;
+
 	@RequestMapping( { "", "/main" } )
 	public String index(
 			Model model, 
-			@RequestParam(required=false, defaultValue="0") Long page) {
+			@RequestParam(required=false, defaultValue="0") int page,
+			HttpSession session) {
 		Page<Item> list = itemService.getAllItem(page);
+		
+		if(session.getAttribute("authUser") != null) {
+			User user = (User) session.getAttribute("authUser");
+			List<Integer> usedRentNoList = userSerivce.checkRent(user);
+			List<Integer> usedReserveNoList = userSerivce.checkReserve(user);
+			model.addAttribute("usedRentNoList", usedRentNoList);
+			model.addAttribute("usedReserveNoList", usedReserveNoList);
+		}
 		model.addAttribute("list", list);
 		model.addAttribute("pager", itemService.getPager());
 		return "main/index";

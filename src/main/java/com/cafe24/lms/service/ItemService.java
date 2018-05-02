@@ -26,13 +26,17 @@ public class ItemService {
 		return pager;
 	}
 
-	public Page<Item> getAllItem(Long page) {
-		PageRequest pageRequest = new PageRequest(0, 5, new Sort(Direction.DESC, "no"));
-		Page<Item> list = itemRepository.findAllByStartNo(page, pageRequest);
+	public Page<Item> getAllItem(int page) {
+		
 		pager = new Pager();
 		pager.setPage(page);
-		pager.setTotalCount(list.getTotalPages());
+		pager.setTotalCount(itemRepository.count());
 		pager.calculate(pager.getPage());
+		
+		if(page == 0) {page = 1;}
+		
+		PageRequest pageRequest = new PageRequest(page - 1, 5, new Sort(Direction.DESC, "no"));
+		Page<Item> list = itemRepository.findAll(pageRequest);
 		return list;
 	}
 	

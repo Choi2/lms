@@ -5,7 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
 
 @Entity
-@DiscriminatorValue("album")
+@DiscriminatorValue("음반")
 @PrimaryKeyJoinColumn(name="album_no")
 public class Album extends Item{
 	private String singer;
