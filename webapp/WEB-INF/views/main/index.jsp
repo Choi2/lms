@@ -23,63 +23,51 @@
 						<th>번호</th>
 						<th>타이틀</th>
 						<th>카테고리</th>
-						<th>&nbsp;</th>
+						<th>예약/대여</th>
 					</tr>
+					
+					<c:forEach items="${list.content}" var="vo" varStatus="status">
 					<tr>
-						<td>5</td>
-						<td>세상의 중심에서 사랑을 외친 짐승</td>
-						<td>도서(소설)</td>
-						<td>
-							<a href="${pageContext.servletContext.contextPath }/rent" class="btn">대여</a>
-							<a href="${pageContext.servletContext.contextPath }/rent" class="btn">예약</a>
-						</td>
-					</tr>
-					<tr>
-						<td>4</td>
-						<td>AC/DC: Fly On The Wall</td>
-						<td>음반(락)</td>
-						<td>
-							<a href="${pageContext.servletContext.contextPath }/rent" class="btn">대여</a>
-							<a href="${pageContext.servletContext.contextPath }/rent" class="btn">예약</a>
-						</td>
-					</tr>						
-					<tr>
-						<td>3</td>
-						<td>Java의 정석 [3판]</td>
-						<td>도서(IT)</td>
-						<td>
-							<a href="${pageContext.servletContext.contextPath }/rent" class="btn">대여</a>
-							<a href="${pageContext.servletContext.contextPath }/rent" class="btn">예약</a>
+						<td>${vo.no}</td>
+						<td>${vo.title}</td>
+						<td>${vo.type} (${vo.category.name})</td>
+						<td style="text-align:center;">
+							<c:if test="${vo.isRent eq false}">
+							<a href="${pageContext.servletContext.contextPath}/rent?itemNo=${vo.no}" class="btn">대여</a>
+							</c:if>
+							<c:if test="${vo.isRent eq true}">
+							<a href="${pageContext.servletContext.contextPath}/reverse?itemNo=${vo.no}" class="btn">예약</a>
+							</c:if>
 						</td>
 					</tr>
-					<tr>
-						<td>2</td>
-						<td>파리로 가는 길</td>
-						<td>DVD(영화-드라마)</td>
-						<td>
-							<a href="${pageContext.servletContext.contextPath }/rent" class="btn">대여</a>
-							<a href="${pageContext.servletContext.contextPath }/rent" class="btn">예약</a>
-						</td>
-					</tr>				
-					<tr>
-						<td>1</td>
-						<td>브루크너: 교향곡 7번</td>
-						<td>음반(클래식)</td>
-						<td>
-							<a href="${pageContext.servletContext.contextPath }/rent" class="btn">대여</a>
-							<a href="${pageContext.servletContext.contextPath }/rent" class="btn">예약</a>
-						</td>
-					</tr>				
+					</c:forEach>
+							
 				</table>
 				<div class="pager">
 					<ul>
-						<li><a href="${pageContext.servletContext.contextPath }/rent">◀</a></li>
-						<li><a href="${pageContext.servletContext.contextPath }/rent">6</a></li>
-						<li><a href="${pageContext.servletContext.contextPath }/rent">7</a></li>
-						<li class="selected">8</li>
-						<li>9</li>
-						<li>10</li>
-						<li>▶</li>
+						<c:if test="${pager.leftArrow eq true}">
+							<li><a href="${pageContext.servletContext.contextPath}/board?page=${pager.startPage - 1}&word=${pager.word}">◀</a></li>
+						</c:if>
+						
+						<c:forEach begin="${pager.startPage}" end="${pager.endPage}" varStatus="status">
+							<li>
+								<c:if test="${param.page == status.index}">	
+									<a style="color:red;" href="${pageContext.servletContext.contextPath}/board?page=${status.index}&word=${word}">${status.index}</a>
+								</c:if>
+									
+								<c:if test="${param.page != status.index}">
+									<a href="${pageContext.servletContext.contextPath}/board?page=${status.index}&word=${word}">${status.index}</a>
+								</c:if>
+							</li>
+						</c:forEach>
+						
+						<c:forEach begin ="${pager.endPage + 1}" end = '5'  varStatus="status">
+							<li style="color:gray;">${status.index}</li>
+						</c:forEach>
+						
+						<c:if test="${pager.rightArrow eq true}">
+							<li><a href="${pageContext.servletContext.contextPath}/board?page=${pager.endPage + 1}&word=${pager.word}">▶</a></li>
+						</c:if>
 					</ul>
 				</div>				
 				<div class="bottom">
