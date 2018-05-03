@@ -1,13 +1,16 @@
 package com.cafe24.lms.service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.cafe24.lms.domain.Reserve;
 import com.cafe24.lms.domain.User;
 import com.cafe24.lms.repository.RentRepository;
 import com.cafe24.lms.repository.ReserveRepository;
@@ -45,10 +48,15 @@ public class UserService {
 		return list;
 	}
 	
-	public List<Integer> checkReserve(User user) {
-		List<Integer> list = reserveRepository.findByUserNo(user.getNo());
-		System.out.println(list);
-		return list;
+	public Map<Long, Integer> checkReserve(User user) {
+		List<Reserve> list = reserveRepository.findByUserNo(user.getNo());
+		Map<Long, Integer> results = new HashMap<Long, Integer>();
+		
+		for(Reserve reserve : list) {
+			results.put(reserve.getItem().getNo(), reserve.getReserveRank());
+		}
+		
+		return results;
 	}
 
 }

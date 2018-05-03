@@ -46,7 +46,7 @@ public class ReserveService {
 		
 		PageRequest pageRequest = new PageRequest((int) (page - 1), 5, new Sort(Direction.DESC, "no"));
 		Page<Reserve> list = reserveRepository.findAll(pageRequest);
-		
+		System.out.println(pager);
 		return list;
 	}
 

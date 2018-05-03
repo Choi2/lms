@@ -4,7 +4,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 		<div id="header">
-			<h1>도서대여서비스</h1>
+			<h1><a style="text-decoration: none;" href="${pageContext.servletContext.contextPath}">도서대여서비스</a></h1>
 			<ul>
 					<c:if test="${sessionScope.authUser.email eq 'admin@naver.com'}">
 						<li><a href="${pageContext.servletContext.contextPath}/admin">관리자 페이지</a></li>

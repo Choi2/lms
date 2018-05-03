@@ -26,17 +26,22 @@ public class ItemService {
 		return pager;
 	}
 
-	public Page<Item> getAllItem(int page) {
+	public Page<Item> getAllItem(Pager pager) {
 		
-		pager = new Pager();
-		pager.setPage(page);
-		pager.setTotalCount(itemRepository.count());
+		Page<Item> list = null;
+		pager.setPage(pager.getPage());
+		PageRequest pageRequest = new PageRequest((int)(pager.getPage() - 1), 5, new Sort(Direction.DESC, "no"));
+		
+		if(pager.getWord() == null || pager.getWord().equals("") ) {
+			list = itemRepository.findAll(pageRequest);
+			pager.setTotalCount(itemRepository.count());
+		} else {
+			
+			list = itemRepository.findAllWithWord(pager.getWord(), pageRequest);
+			pager.setTotalCount((long) (list.getTotalPages() * 5));
+		}
+		
 		pager.calculate(pager.getPage());
-		
-		if(page == 0) {page = 1;}
-		
-		PageRequest pageRequest = new PageRequest(page - 1, 5, new Sort(Direction.DESC, "no"));
-		Page<Item> list = itemRepository.findAll(pageRequest);
 		return list;
 	}
 	

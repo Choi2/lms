@@ -14,8 +14,8 @@
 		<c:import url="/WEB-INF/views/include/header.jsp" />
 		<div id="content">
 			<div id="board">
-				<form id="search_form" action="${pageContext.request.contextPath }" method="get">
-					<input type="text" id="kwd" name="kwd" value="">
+				<form id="search_form" action="${pageContext.request.contextPath}" method="get">
+					<input type="text" id="word" name="word" value="" placeholder="찾을 타이틀을 입력하세요">
 					<input type="submit" value="찾기">
 				</form>
 				<table class="tbl-ex">
@@ -23,8 +23,14 @@
 						<th>번호</th>
 						<th>타이틀</th>
 						<th>카테고리</th>
-						<th>예약/대여</th>
+						<th>대여/예약</th>
 					</tr>
+					
+					<c:if test="${list.content.size() eq 0}">
+					<tr>
+						<td colspan="4" align="center">도서가 존재하지 않습니다.</td>
+					</tr>
+					</c:if>
 					
 					<c:forEach items="${list.content}" var="vo" varStatus="status">
 					<tr>
@@ -37,15 +43,19 @@
 								<p> 이미 대여가 되어 있는 도서입니다. </p>
 							</c:when>
 							
-							<c:when test="${(usedReserveNoList ne null) and usedReserveNoList.contains(vo.no) eq true}">
-								<p> 이미 예약이 되어 있는 도서입니다. </p>
+							<c:when test="${(usedReserveNoList ne null) and usedReserveNoList.containsKey(vo.no) eq true}">
+								<p> 이미 예약이 되어 있는 도서입니다.(예비순번 : ${usedReserveNoList.get(vo.no)}) </p>
 							</c:when>
 							<c:otherwise>
-								<c:if test="${vo.isRent eq false}">
-								<a href="${pageContext.servletContext.contextPath}/rent?itemNo=${vo.no}" class="btn">대여</a>
-								</c:if>
 								<c:if test="${vo.isRent eq true}">
 								<a href="${pageContext.servletContext.contextPath}/reserve?itemNo=${vo.no}" class="btn">예약</a>
+								<a style="pointer-events:none; background:gray;" href="${pageContext.servletContext.contextPath}/rent?itemNo=${vo.no}" class="btn">
+								<font style="color:white;">대여</font></a>
+								</c:if>
+								<c:if test="${vo.isRent eq false}">
+								<a style="pointer-events:none; background:gray;" href="${pageContext.servletContext.contextPath}/reserve?itemNo=${vo.no}" class="btn">
+								<font style="color:white;">예약</font></a>
+								<a href="${pageContext.servletContext.contextPath}/rent?itemNo=${vo.no}" class="btn">대여</a>
 								</c:if>
 							</c:otherwise>
 							</c:choose>
@@ -57,17 +67,17 @@
 				<div class="pager">
 					<ul>
 						<c:if test="${pager.leftArrow eq true}">
-							<li><a href="${pageContext.servletContext.contextPath}?page=${pager.startPage - 1}">◀</a></li>
+							<li><a href="${pageContext.servletContext.contextPath}?page=${pager.startPage - 1}&word=${pager.word}">◀</a></li>
 						</c:if>
 						
 						<c:forEach begin="${pager.startPage}" end="${pager.endPage}" varStatus="status">
 							<li>
 								<c:if test="${param.page == status.index}">	
-									<a style="color:red;" href="${pageContext.servletContext.contextPath}?page=${status.index}">${status.index}</a>
+									<a style="color:red;" href="${pageContext.servletContext.contextPath}?page=${status.index}&word=${pager.word}">${status.index}</a>
 								</c:if>
 									
 								<c:if test="${param.page != status.index}">
-									<a href="${pageContext.servletContext.contextPath}?page=${status.index}">${status.index}</a>
+									<a href="${pageContext.servletContext.contextPath}?page=${status.index}&word=${pager.word}">${status.index}</a>
 								</c:if>
 							</li>
 						</c:forEach>
@@ -77,7 +87,7 @@
 						</c:forEach>
 						
 						<c:if test="${pager.rightArrow eq true}">
-							<li><a href="${pageContext.servletContext.contextPath}?page=${pager.endPage + 1}">▶</a></li>
+							<li><a href="${pageContext.servletContext.contextPath}?page=${pager.endPage + 1}&word=${pager.word}">▶</a></li>
 						</c:if>
 					</ul>
 				</div>				

@@ -23,6 +23,13 @@
 						<th>반납일</th>
 					</tr>
 					
+					<c:if test="${list.content.size() eq 0}">
+					<tr>
+						<td colspan="5" align="center">대여 내역이 존재하지 않습니다.</td>
+					</tr>
+					</c:if>
+					
+					
 					<c:forEach items="${list.content}" var="vo" varStatus="status">
 					<tr>
 						<td>${vo.no}</td>
@@ -40,17 +47,17 @@
 				<div class="pager">
 					<ul>
 						<c:if test="${pager.leftArrow eq true}">
-							<li><a href="${pageContext.servletContext.contextPath}/board?page=${pager.startPage - 1}&word=${pager.word}">◀</a></li>
+							<li><a href="${pageContext.servletContext.contextPath}/admin/rent?page=${pager.startPage - 1}">◀</a></li>
 						</c:if>
 						
 						<c:forEach begin="${pager.startPage}" end="${pager.endPage}" varStatus="status">
 							<li>
 								<c:if test="${param.page == status.index}">	
-									<a style="color:red;" href="${pageContext.servletContext.contextPath}/board?page=${status.index}&word=${word}">${status.index}</a>
+									<a style="color:red;" href="${pageContext.servletContext.contextPath}/admin/rent?page=${status.index}">${status.index}</a>
 								</c:if>
 									
 								<c:if test="${param.page != status.index}">
-									<a href="${pageContext.servletContext.contextPath}/board?page=${status.index}&word=${word}">${status.index}</a>
+									<a href="${pageContext.servletContext.contextPath}/admin/rent?page=${status.index}">${status.index}</a>
 								</c:if>
 							</li>
 						</c:forEach>
@@ -60,12 +67,14 @@
 						</c:forEach>
 						
 						<c:if test="${pager.rightArrow eq true}">
-							<li><a href="${pageContext.servletContext.contextPath}/board?page=${pager.endPage + 1}&word=${pager.word}">▶</a></li>
+							<li><a href="${pageContext.servletContext.contextPath}/admin/rent?page=${pager.endPage + 1}">▶</a></li>
 						</c:if>
 					</ul>
 				</div>
 			</div>
-			<c:import url="/WEB-INF/views/admin/include/navigation.jsp" />
+			<c:import url="/WEB-INF/views/admin/include/navigation.jsp" >
+				<c:param name="menu" value="rent"/>
+			</c:import>
 		</div>
 	</div>
 </body>

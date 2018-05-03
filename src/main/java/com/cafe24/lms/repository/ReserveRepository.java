@@ -22,8 +22,8 @@ public interface ReserveRepository extends JpaRepository<Reserve, Long> {
 			+ "   and r.returnDate = (select max(r.returnDate) from Reserve r where r.item.no = :itemNo)")
 	Reserve findByItemNoWithMaxReturndate(@Param("itemNo") Long itemNo);
 
-	@Query(value="select r.item.no from Reserve r where r.user.no = :userNo", nativeQuery=false)
-	List<Integer> findByUserNo(@Param("userNo") Long userNo);
+	@Query(value="select r from Reserve r where r.user.no = :userNo", nativeQuery=false)
+	List<Reserve> findByUserNo(@Param("userNo") Long userNo);
 
 		
 }
