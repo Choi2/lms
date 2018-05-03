@@ -15,8 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.cafe24.lms.domain.User;
+import com.cafe24.lms.interceptor.Auth;
+import com.cafe24.lms.interceptor.Auth.Role;
 import com.cafe24.lms.service.UserService;
-
 
 
 @Controller
@@ -81,15 +82,20 @@ public class UserController {
 	}
 	
 	
+	@Auth(Role.USER)
 	@RequestMapping(value="/modify", method=RequestMethod.GET)
-	public String modify(HttpSession session) {
-		
-		User authUser = (User) session.getAttribute("authUser");
-		//접근 제어
-		if(authUser == null) {
-			return "redirect:/main";
-		}
-
+	public String modify(
+			HttpSession session,
+			Model model) {
+		User user = (User) session.getAttribute("authUser");
+		model.addAttribute("user", user);
 		return "user/modify";
+	}
+	
+	@Auth(Role.USER)
+	@RequestMapping(value="/modify", method=RequestMethod.POST)
+	public String modify(@ModelAttribute User user) {
+		userService.modifyUser(user);
+		return "redirect:/user/joinsuccess";
 	}
 }

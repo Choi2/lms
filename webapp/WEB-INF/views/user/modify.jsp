@@ -28,7 +28,7 @@
 					<fieldset>
 						<legend>성별</legend>
 						<c:choose>
-							<c:when test='${user.gender == "male" }'>
+							<c:when test="${user.gender eq 'male'}">
 								<label>여</label> <input type="radio" name="gender" value="female">
 								<label>남</label> <input type="radio" name="gender" value="male" checked="checked">
 							</c:when>
