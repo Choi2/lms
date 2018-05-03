@@ -54,6 +54,7 @@ public class MainController {
 		model.addAttribute("pager", itemService.getPager());
 		return "main/index";
 	}
+		
 	
 	@RequestMapping( "/rent" )
 	public String rent(

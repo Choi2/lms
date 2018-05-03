@@ -44,7 +44,7 @@ public class RentService {
 		
 		if(page == 0) {page = 1L;}
 		
-		PageRequest pageRequest = new PageRequest(0, 5, new Sort(Direction.DESC, "no"));
+		PageRequest pageRequest = new PageRequest((int) (page - 1), 5, new Sort(Direction.DESC, "no"));
 		Page<Rent> list = rentRepository.findAll(pageRequest);
 	
 		return list;

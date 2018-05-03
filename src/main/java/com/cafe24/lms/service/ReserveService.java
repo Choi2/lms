@@ -58,14 +58,15 @@ public class ReserveService {
 		if(reserve == null) {
 			reserve = new Reserve();
 			Item item = itemRepository.findOne(itemNo);
-			reserve.setItem(item);		
+			reserve.setItem(item);
+			cal.add(Calendar.DAY_OF_MONTH, 7);
 		} else {
 			reserve.setNo(reserve.getNo() + 1);
 			cal.setTime(reserve.getReturnDate());
 		}
 		
 		reserve.setUser(user);
-		reserve.setReverseRank(reserve.getReverseRank() + 1);
+		reserve.setReserveRank(reserve.getReserveRank() + 1);
 		
 	
 		reserve.setBorrowDate(cal.getTime());	

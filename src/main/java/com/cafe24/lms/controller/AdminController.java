@@ -9,10 +9,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.cafe24.lms.domain.Rent;
 import com.cafe24.lms.domain.Reserve;
+import com.cafe24.lms.interceptor.Auth;
 import com.cafe24.lms.service.RentService;
 import com.cafe24.lms.service.ReserveService;
 
-// @Auth(value=Auth.Role.ADMIN)
+@Auth(value=Auth.Role.ADMIN)
 @Controller
 @RequestMapping( "/admin" )
 public class AdminController {
@@ -23,6 +24,7 @@ public class AdminController {
 	@Autowired
 	private ReserveService reverseService;
 	
+
 	@RequestMapping( { "", "/rent", "/main" } )
 	public String main( 
 			Model model,

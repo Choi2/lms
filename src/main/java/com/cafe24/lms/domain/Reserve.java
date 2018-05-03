@@ -34,9 +34,9 @@ public class Reserve {
 	@Column(name="return_date")
 	private Date returnDate;
 
-	@Column(name="reverse_rank")
+	@Column(name="reserve_rank")
 	@ColumnDefault("0")
-	private int reverseRank;
+	private int reserveRank;
 
 	public Long getNo() {
 		return no;
@@ -78,17 +78,17 @@ public class Reserve {
 		this.returnDate = returnDate;
 	}
 
-	public int getReverseRank() {
-		return reverseRank;
+	public int getReserveRank() {
+		return reserveRank;
 	}
 
-	public void setReverseRank(int reverseRank) {
-		this.reverseRank = reverseRank;
+	public void setReserveRank(int reserveRank) {
+		this.reserveRank = reserveRank;
 	}
 
 	@Override
 	public String toString() {
 		return "Reverse [no=" + no + ", item=" + item + ", user=" + user + ", borrowDate=" + borrowDate
-				+ ", returnDate=" + returnDate + ", reverseRank=" + reverseRank + "]";
+				+ ", returnDate=" + returnDate + ", reverseRank=" + reserveRank + "]";
 	}
 }

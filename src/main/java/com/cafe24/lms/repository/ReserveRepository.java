@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 import com.cafe24.lms.domain.Reserve;
 
 public interface ReserveRepository extends JpaRepository<Reserve, Long> {
+	
 	@Query(value="select r from Reserve r", nativeQuery=false)
 	Page<Reserve> findAll(Pageable pageable); //JPQL
 
