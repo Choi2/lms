@@ -38,6 +38,7 @@
 						<td>${vo.title}</td>
 						<td>${vo.type} (${vo.category.name})</td>
 						<td style="text-align:center;">
+							
 							<c:choose>
 							<c:when test="${(usedRentNoList ne null) and usedRentNoList.contains(vo.no) eq true}">
 								<p> 이미 대여가 되어 있는 도서입니다. </p>
@@ -46,6 +47,7 @@
 							<c:when test="${(usedReserveNoList ne null) and usedReserveNoList.containsKey(vo.no) eq true}">
 								<p> 이미 예약이 되어 있는 도서입니다.(예비순번 : ${usedReserveNoList.get(vo.no)}) </p>
 							</c:when>
+							
 							<c:otherwise>
 								<c:if test="${vo.isRent eq true}">
 								<a href="${pageContext.servletContext.contextPath}/reserve?itemNo=${vo.no}" class="btn">예약</a>
@@ -58,6 +60,7 @@
 								<a href="${pageContext.servletContext.contextPath}/rent?itemNo=${vo.no}" class="btn">대여</a>
 								</c:if>
 							</c:otherwise>
+							
 							</c:choose>
 						</td>
 					</tr>
